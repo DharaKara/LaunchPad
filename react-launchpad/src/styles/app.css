@@ -636,3 +636,837 @@ code {
   .hero-subtitle { font-size: 15px; }
   .features { grid-template-columns: 1fr; }
 }
+/* ─── GLOBAL SUBTLE LAYERED WAVES BACKGROUND ───────────────── */
+
+body {
+  background: #f7f7f5; /* fallback */
+  position: relative;
+  z-index: 0;
+  overflow-x: hidden;
+}
+
+/* Layer 1: soft top wave */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 0;
+  width: 200%;
+  height: 400px;
+  background: rgba(37, 99, 235, 0.05);
+  border-radius: 50%;
+  transform: rotate(15deg);
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Layer 2: subtle mid wave */
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -150px;
+  right: 0;
+  width: 180%;
+  height: 350px;
+  background: rgba(37, 99, 235, 0.07);
+  border-radius: 50%;
+  transform: rotate(-10deg);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Ensure content stays above waves */
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   VISUAL UPGRADE PATCH — CLEAN / MODERN / PREMIUM
+   Paste this at the VERY bottom of your CSS
+========================================================= */
+
+/* ─── IMPROVED DESIGN TOKENS ───────────────────────────── */
+:root {
+  --bg: #f8fafc;
+  --bg2: #f1f5f9;
+  --bg3: #e2e8f0;
+  --card: rgba(255, 255, 255, 0.78);
+  --border: rgba(15, 23, 42, 0.08);
+  --border2: rgba(15, 23, 42, 0.14);
+  --text: #475569;
+  --text-h: #0f172a;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #dbeafe;
+  --accent-glow: rgba(37, 99, 235, 0.16);
+
+  --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.04);
+  --shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+  --shadow-md: 0 16px 45px rgba(15, 23, 42, 0.10);
+
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+}
+
+/* ─── GLOBAL BACKGROUND UPGRADE ───────────────────────── */
+body {
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(124, 58, 237, 0.06), transparent 24%),
+    linear-gradient(180deg, #f8fafc 0%, #f8fafc 100%);
+  background-attachment: fixed;
+}
+
+/* More elegant floating blur blobs */
+body::before {
+  content: '';
+  position: fixed;
+  width: 650px;
+  height: 650px;
+  top: -220px;
+  left: -140px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.12), transparent 70%);
+  filter: blur(40px);
+  border-radius: 50%;
+  z-index: -2;
+  pointer-events: none;
+  transform: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  bottom: -220px;
+  right: -140px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.10), transparent 70%);
+  filter: blur(45px);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+  transform: none;
+}
+
+/* ─── TYPOGRAPHY POLISH ───────────────────────────────── */
+h1, .hero-title, .page-title, .onboarding-title, .report-hero__heading h2, .cv-simulator-hero h1 {
+  line-height: 1.02;
+}
+
+p, .hero-subtitle, .hero-copy, .section-copy, .overview-text p, .benefit-item p, .feature-card p {
+  color: var(--text);
+}
+
+/* Better text width for readability */
+.hero-subtitle,
+.hero-copy,
+.section-copy,
+.onboarding-copy,
+.report-hero__heading p {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+/* ─── GLASS HEADER ────────────────────────────────────── */
+.header {
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.header-brand {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.header-links a,
+.header-actions a {
+  border-radius: 10px;
+}
+
+.header-links a:hover,
+.header-actions a:hover {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+/* ─── BUTTON UPGRADE ─────────────────────────────────── */
+.button-link,
+.primary-btn,
+.cta-btn,
+.auth-card button,
+.onboarding-btn:not(.secondary-outline) {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow:
+    0 10px 24px rgba(37, 99, 235, 0.20),
+    0 3px 8px rgba(37, 99, 235, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.button-link:hover,
+.primary-btn:hover,
+.cta-btn:hover,
+.auth-card button:hover,
+.onboarding-btn:not(.secondary-outline):hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 14px 32px rgba(37, 99, 235, 0.24),
+    0 4px 10px rgba(37, 99, 235, 0.12);
+}
+
+.secondary-btn,
+.secondary-outline,
+.cta-secondary {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.secondary-btn:hover,
+.secondary-outline:hover,
+.cta-secondary:hover {
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ─── CARD SYSTEM UPGRADE ────────────────────────────── */
+.auth-card,
+.pricing-card,
+.price-card,
+.onboarding-card,
+.onboarding-summary,
+.feature-card,
+.benefit-item,
+.step-block,
+.report-hero__heading,
+.report-stat-card,
+.report-card,
+.gap-card,
+.roadmap-column,
+.report-notes,
+.input-card,
+.results-card {
+  background: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 12px 32px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* Hover polish for all cards */
+.price-card,
+.feature-card,
+.benefit-item,
+.step-block,
+.report-card,
+.gap-card,
+.roadmap-column,
+.report-stat-card,
+.input-card,
+.results-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.price-card:hover,
+.feature-card:hover,
+.benefit-item:hover,
+.step-block:hover,
+.report-card:hover,
+.gap-card:hover,
+.roadmap-column:hover,
+.report-stat-card:hover,
+.input-card:hover,
+.results-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.09),
+    0 0 0 1px rgba(37, 99, 235, 0.05);
+  border-color: rgba(37, 99, 235, 0.14);
+}
+
+/* ─── HERO SECTION PREMIUM LOOK ──────────────────────── */
+.hero {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.hero-title {
+  font-size: clamp(2.6rem, 6vw, 4.3rem);
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.hero-subtitle {
+  font-size: 1.08rem;
+  line-height: 1.8;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+.hero-highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.12);
+  padding: 8px 14px;
+  border-radius: 999px;
+  margin-top: 8px;
+  margin-bottom: 28px;
+}
+
+/* ─── INPUTS / TEXTAREAS ─────────────────────────────── */
+input,
+textarea,
+select {
+  border-radius: 14px !important;
+}
+
+.auth-card input,
+.question-field input,
+.question-field textarea,
+.input-card textarea {
+  background: rgba(248, 250, 252, 0.88);
+  border: 1.5px solid rgba(15, 23, 42, 0.08);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.auth-card input:focus,
+.question-field input:focus,
+.question-field textarea:focus,
+.input-card textarea:focus {
+  border-color: rgba(37, 99, 235, 0.55);
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.10),
+    inset 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+/* ─── TAGS / PILLS / BADGES ──────────────────────────── */
+.tag,
+.card-label,
+.card-pill,
+.report-badge,
+.onboarding-tag,
+.cv-simulator-hero .eyebrow,
+.overview-text .eyebrow,
+.insight-copy .eyebrow {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.tag.accent,
+.report-badge,
+.onboarding-tag,
+.cv-simulator-hero .eyebrow,
+.overview-text .eyebrow,
+.insight-copy .eyebrow {
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+}
+
+/* ─── FEATURE / STEP / BENEFIT CARDS MORE STRUCTURED ─── */
+.feature-card,
+.benefit-item,
+.step-block {
+  text-align: left;
+}
+
+.feature-card h3,
+.benefit-item h3,
+.step-block h4 {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.feature-card p,
+.benefit-item p,
+.step-block p {
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+
+/* ─── DROP ZONE IMPROVEMENT ──────────────────────────── */
+.drop-zone {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.75), rgba(248,250,252,0.85));
+  border: 2px dashed rgba(37, 99, 235, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.drop-zone:hover,
+.drop-zone.dragging {
+  border-color: rgba(37, 99, 235, 0.45);
+  background:
+    linear-gradient(180deg, rgba(239,246,255,0.85), rgba(248,250,252,0.92));
+  box-shadow:
+    0 0 0 6px rgba(37, 99, 235, 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* ─── SCORE / RESULTS LOOK BETTER ────────────────────── */
+.score-value {
+  background: linear-gradient(135deg, #0f172a, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.result-metric {
+  background: rgba(248, 250, 252, 0.78);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 18px;
+}
+
+/* ─── FEATURED PRICING CARD STANDOUT ─────────────────── */
+.featured {
+  position: relative;
+  overflow: hidden;
+  transform: translateY(-8px);
+  border-color: rgba(124, 58, 237, 0.18);
+  box-shadow:
+    0 20px 48px rgba(124, 58, 237, 0.12),
+    0 0 0 1px rgba(124, 58, 237, 0.08);
+}
+
+.featured::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.04), transparent 30%, rgba(37, 99, 235, 0.04));
+  pointer-events: none;
+}
+
+/* ─── SMOOTHER SECTION SPACING ───────────────────────── */
+.page-container,
+.career-results,
+.cv-simulator-page,
+.onboarding-page {
+  position: relative;
+  z-index: 1;
+}
+
+.features,
+.landing-benefits,
+.step-grid,
+.insight-grid,
+.feature-card-grid,
+.report-grid,
+.gap-grid,
+.roadmap-grid {
+  gap: 18px;
+}
+
+/* ─── SCROLLBAR (OPTIONAL BUT NICE) ──────────────────── */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.14);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.22);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+/* ─── SUBTLE PREMIUM CARD TOP TINT ───────────────────── */
+
+.auth-card,
+.pricing-card,
+.price-card,
+.onboarding-card,
+.onboarding-summary,
+.feature-card,
+.benefit-item,
+.step-block,
+.report-hero__heading,
+.report-stat-card,
+.report-card,
+.gap-card,
+.roadmap-column,
+.report-notes,
+.input-card,
+.results-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.auth-card::before,
+.pricing-card::before,
+.price-card::before,
+.onboarding-card::before,
+.onboarding-summary::before,
+.feature-card::before,
+.benefit-item::before,
+.step-block::before,
+.report-hero__heading::before,
+.report-stat-card::before,
+.report-card::before,
+.gap-card::before,
+.roadmap-column::before,
+.report-notes::before,
+.input-card::before,
+.results-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 85px;
+  background: linear-gradient(
+    180deg,
+    rgba(37, 99, 235, 0.05) 0%,
+    rgba(124, 58, 237, 0.025) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-card > *,
+.pricing-card > *,
+.price-card > *,
+.onboarding-card > *,
+.onboarding-summary > *,
+.feature-card > *,
+.benefit-item > *,
+.step-block > *,
+.report-hero__heading > *,
+.report-stat-card > *,
+.report-card > *,
+.gap-card > *,
+.roadmap-column > *,
+.report-notes > *,
+.input-card > *,
+.results-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   COLOUR UPGRADE — MORE VISUAL LIFE ACROSS ALL PAGES
+   Paste at the VERY bottom of your CSS
+========================================================= */
+
+/* ─── COLOUR PALETTE ──────────────────────────────────── */
+:root {
+  --blue-soft: rgba(37, 99, 235, 0.08);
+  --blue-border: rgba(37, 99, 235, 0.16);
+
+  --purple-soft: rgba(124, 58, 237, 0.08);
+  --purple-border: rgba(124, 58, 237, 0.16);
+
+  --green-soft: rgba(5, 150, 105, 0.08);
+  --green-border: rgba(5, 150, 105, 0.16);
+
+  --orange-soft: rgba(234, 88, 12, 0.08);
+  --orange-border: rgba(234, 88, 12, 0.16);
+
+  --rose-soft: rgba(225, 29, 72, 0.07);
+  --rose-border: rgba(225, 29, 72, 0.15);
+
+  --sky-soft: rgba(14, 165, 233, 0.08);
+  --sky-border: rgba(14, 165, 233, 0.16);
+}
+
+/* =========================================================
+   1) FEATURE / BENEFIT / STEP / INSIGHT CARDS
+========================================================= */
+
+.feature-card,
+.benefit-item,
+.step-block,
+.report-card,
+.gap-card,
+.roadmap-column,
+.report-stat-card,
+.result-metric {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: all 0.25s ease;
+}
+
+/* Blue */
+.feature-card:nth-child(5n + 1),
+.benefit-item:nth-child(5n + 1),
+.step-block:nth-child(5n + 1),
+.report-card:nth-child(5n + 1),
+.gap-card:nth-child(5n + 1),
+.roadmap-column:nth-child(5n + 1),
+.report-stat-card:nth-child(5n + 1),
+.result-metric:nth-child(5n + 1) {
+  background: linear-gradient(180deg, var(--blue-soft) 0%, rgba(255,255,255,0.88) 38%);
+  border-color: var(--blue-border);
+}
+
+/* Purple */
+.feature-card:nth-child(5n + 2),
+.benefit-item:nth-child(5n + 2),
+.step-block:nth-child(5n + 2),
+.report-card:nth-child(5n + 2),
+.gap-card:nth-child(5n + 2),
+.roadmap-column:nth-child(5n + 2),
+.report-stat-card:nth-child(5n + 2),
+.result-metric:nth-child(5n + 2) {
+  background: linear-gradient(180deg, var(--purple-soft) 0%, rgba(255,255,255,0.88) 38%);
+  border-color: var(--purple-border);
+}
+
+/* Green */
+.feature-card:nth-child(5n + 3),
+.benefit-item:nth-child(5n + 3),
+.step-block:nth-child(5n + 3),
+.report-card:nth-child(5n + 3),
+.gap-card:nth-child(5n + 3),
+.roadmap-column:nth-child(5n + 3),
+.report-stat-card:nth-child(5n + 3),
+.result-metric:nth-child(5n + 3) {
+  background: linear-gradient(180deg, var(--green-soft) 0%, rgba(255,255,255,0.88) 38%);
+  border-color: var(--green-border);
+}
+
+/* Orange */
+.feature-card:nth-child(5n + 4),
+.benefit-item:nth-child(5n + 4),
+.step-block:nth-child(5n + 4),
+.report-card:nth-child(5n + 4),
+.gap-card:nth-child(5n + 4),
+.roadmap-column:nth-child(5n + 4),
+.report-stat-card:nth-child(5n + 4),
+.result-metric:nth-child(5n + 4) {
+  background: linear-gradient(180deg, var(--orange-soft) 0%, rgba(255,255,255,0.88) 38%);
+  border-color: var(--orange-border);
+}
+
+/* Rose */
+.feature-card:nth-child(5n + 5),
+.benefit-item:nth-child(5n + 5),
+.step-block:nth-child(5n + 5),
+.report-card:nth-child(5n + 5),
+.gap-card:nth-child(5n + 5),
+.roadmap-column:nth-child(5n + 5),
+.report-stat-card:nth-child(5n + 5),
+.result-metric:nth-child(5n + 5) {
+  background: linear-gradient(180deg, var(--rose-soft) 0%, rgba(255,255,255,0.88) 38%);
+  border-color: var(--rose-border);
+}
+
+/* Stronger hover polish */
+.feature-card:hover,
+.benefit-item:hover,
+.step-block:hover,
+.report-card:hover,
+.gap-card:hover,
+.roadmap-column:hover,
+.report-stat-card:hover,
+.result-metric:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+}
+
+/* =========================================================
+   2) FEATURE CARD TITLES GET A BIT MORE LIFE
+========================================================= */
+
+.feature-card h3,
+.benefit-item h3,
+.step-block h4,
+.report-card h4,
+.gap-card h4,
+.roadmap-column h4,
+.report-stat-card h4,
+.result-metric h3 {
+  color: var(--text-h);
+}
+
+/* Optional subtle left accent bar */
+.feature-card::after,
+.benefit-item::after,
+.step-block::after,
+.report-card::after,
+.gap-card::after,
+.roadmap-column::after,
+.report-stat-card::after,
+.result-metric::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 38px;
+  height: 4px;
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+/* Matching top accent lines */
+.feature-card:nth-child(5n + 1)::after,
+.benefit-item:nth-child(5n + 1)::after,
+.step-block:nth-child(5n + 1)::after,
+.report-card:nth-child(5n + 1)::after,
+.gap-card:nth-child(5n + 1)::after,
+.roadmap-column:nth-child(5n + 1)::after,
+.report-stat-card:nth-child(5n + 1)::after,
+.result-metric:nth-child(5n + 1)::after {
+  background: #2563eb;
+}
+
+.feature-card:nth-child(5n + 2)::after,
+.benefit-item:nth-child(5n + 2)::after,
+.step-block:nth-child(5n + 2)::after,
+.report-card:nth-child(5n + 2)::after,
+.gap-card:nth-child(5n + 2)::after,
+.roadmap-column:nth-child(5n + 2)::after,
+.report-stat-card:nth-child(5n + 2)::after,
+.result-metric:nth-child(5n + 2)::after {
+  background: #7c3aed;
+}
+
+.feature-card:nth-child(5n + 3)::after,
+.benefit-item:nth-child(5n + 3)::after,
+.step-block:nth-child(5n + 3)::after,
+.report-card:nth-child(5n + 3)::after,
+.gap-card:nth-child(5n + 3)::after,
+.roadmap-column:nth-child(5n + 3)::after,
+.report-stat-card:nth-child(5n + 3)::after,
+.result-metric:nth-child(5n + 3)::after {
+  background: #059669;
+}
+
+.feature-card:nth-child(5n + 4)::after,
+.benefit-item:nth-child(5n + 4)::after,
+.step-block:nth-child(5n + 4)::after,
+.report-card:nth-child(5n + 4)::after,
+.gap-card:nth-child(5n + 4)::after,
+.roadmap-column:nth-child(5n + 4)::after,
+.report-stat-card:nth-child(5n + 4)::after,
+.result-metric:nth-child(5n + 4)::after {
+  background: #ea580c;
+}
+
+.feature-card:nth-child(5n + 5)::after,
+.benefit-item:nth-child(5n + 5)::after,
+.step-block:nth-child(5n + 5)::after,
+.report-card:nth-child(5n + 5)::after,
+.gap-card:nth-child(5n + 5)::after,
+.roadmap-column:nth-child(5n + 5)::after,
+.report-stat-card:nth-child(5n + 5)::after,
+.result-metric:nth-child(5n + 5)::after {
+  background: #e11d48;
+}
+
+/* Add a little top padding so accent bar has room */
+.feature-card,
+.benefit-item,
+.step-block,
+.report-card,
+.gap-card,
+.roadmap-column,
+.report-stat-card,
+.result-metric {
+  padding-top: 30px !important;
+}
+
+/* =========================================================
+   3) PRICING CARDS — MORE VISUAL PERSONALITY
+========================================================= */
+
+.tier-free {
+  background: linear-gradient(180deg, rgba(5,150,105,0.08) 0%, rgba(255,255,255,0.92) 35%);
+  border-color: rgba(5,150,105,0.18);
+}
+
+.tier-premium {
+  background: linear-gradient(180deg, rgba(37,99,235,0.08) 0%, rgba(255,255,255,0.92) 35%);
+  border-color: rgba(37,99,235,0.18);
+}
+
+.tier-bundle {
+  background: linear-gradient(180deg, rgba(124,58,237,0.08) 0%, rgba(255,255,255,0.92) 35%);
+  border-color: rgba(124,58,237,0.18);
+}
+
+.tier-employer {
+  background: linear-gradient(180deg, rgba(234,88,12,0.08) 0%, rgba(255,255,255,0.92) 35%);
+  border-color: rgba(234,88,12,0.18);
+}
+
+/* Featured card glows more */
+.featured {
+  box-shadow:
+    0 20px 50px rgba(124, 58, 237, 0.14),
+    0 0 0 1px rgba(124, 58, 237, 0.08);
+}
+
+/* =========================================================
+   4) STATS / SCORE / REPORT HIGHLIGHTS
+========================================================= */
+
+.score-value {
+  background: linear-gradient(135deg, #2563eb, #7c3aed, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.report-stat-card p {
+  background: linear-gradient(135deg, #0f172a, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================================================
+   5) PILLS / KEYWORDS / TAGS LOOK MORE COLOURFUL
+========================================================= */
+
+.keyword-list li,
+.reason-list li {
+  background: linear-gradient(135deg, rgba(37,99,235,0.10), rgba(124,58,237,0.08));
+  border: 1px solid rgba(37,99,235,0.15);
+  color: #1d4ed8;
+}
+
+.card-label {
+  background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(124,58,237,0.05));
+}
+
+.card-pill {
+  background: linear-gradient(135deg, rgba(15,23,42,0.04), rgba(15,23,42,0.02));
+}
+
+/* =========================================================
+   6) SECTION BLOCKS GET MORE VISUAL DEPTH
+========================================================= */
+
+.report-notes,
+.pricing-card,
+.onboarding-card,
+.input-card,
+.results-card,
+.auth-card {
+  background:
+    linear-gradient(180deg, rgba(37,99,235,0.04) 0%, rgba(255,255,255,0.88) 18%);
+}
+
+/* =========================================================
+   7) OPTIONAL — COLOURFUL STEP NUMBERS
+========================================================= */
+
+.step-block:nth-child(5n + 1) .step-number { background: #2563eb; }
+.step-block:nth-child(5n + 2) .step-number { background: #7c3aed; }
+.step-block:nth-child(5n + 3) .step-number { background: #059669; }
+.step-block:nth-child(5n + 4) .step-number { background: #ea580c; }
+.step-block:nth-child(5n + 5) .step-number { background: #e11d48; }
