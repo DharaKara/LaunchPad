@@ -314,7 +314,7 @@ export default function CvSimulatorPage() {
         </button>
       </div>
 
-      {result && interviewQuestions.length > 0 && !interviewCompleted && (
+      {interviewQuestions.length > 0 && !interviewCompleted && (
         <section className="results-card interview-card">
           <div className="card-header-row">
             <div>
@@ -327,7 +327,7 @@ export default function CvSimulatorPage() {
           <div className="result-grid">
             <div className="result-metric full-width">
               <h3>Interview question</h3>
-              <p>{interviewQuestions[currentQuestionIndex]}</p>
+              <p>{interviewQuestions[currentQuestionIndex]?.question_text}</p>
             </div>
           </div>
 
@@ -365,7 +365,7 @@ export default function CvSimulatorPage() {
             )}
           </div>
 
-          {result.ats_scan && (
+          {result.ats_scan ? (
             <>
               <div className="score-block">
                 <div className="score-value">{result.ats_scan.score}%</div>
@@ -399,6 +399,22 @@ export default function CvSimulatorPage() {
                 </div>
               </div>
             </>
+          ) : (
+            result.overall_match_percentage !== undefined && (
+              <>
+                <div className="score-block">
+                  <div className="score-value">{Math.round(result.overall_match_percentage)}%</div>
+                  <div className="score-label">Overall match</div>
+                </div>
+
+                <div className="result-grid">
+                  <div className="result-metric">
+                    <h3>Final verdict</h3>
+                    <p>{result.final_verdict || "Pending"}</p>
+                  </div>
+                </div>
+              </>
+            )
           )}
 
           {result.funnel_stages && (
@@ -407,7 +423,7 @@ export default function CvSimulatorPage() {
               <ul className="funnel-list">
                 {result.funnel_stages.map((stage, index) => (
                   <li key={index} className={`funnel-stage funnel-stage--${stage.status.toLowerCase()}`}>
-                    <strong>{stage.name}</strong>
+                    <strong>{stage.stage}</strong>
                     <span>{stage.status}</span>
                   </li>
                 ))}
@@ -420,6 +436,19 @@ export default function CvSimulatorPage() {
               <div className="result-metric full-width">
                 <h3>Brutally honest feedback</h3>
                 <p>{result.post_mortem}</p>
+              </div>
+            </div>
+          )}
+
+          {result.improvement_roadmap?.length > 0 && (
+            <div className="result-grid">
+              <div className="result-metric full-width">
+                <h3>Improvement roadmap</h3>
+                <ul>
+                  {result.improvement_roadmap.map((step, index) => (
+                    <li key={index}>{step}</li>
+                  ))}
+                </ul>
               </div>
             </div>
           )}
