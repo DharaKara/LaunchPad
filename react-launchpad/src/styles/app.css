@@ -1470,3 +1470,378 @@ select {
 .step-block:nth-child(5n + 3) .step-number { background: #059669; }
 .step-block:nth-child(5n + 4) .step-number { background: #ea580c; }
 .step-block:nth-child(5n + 5) .step-number { background: #e11d48; }
+
+/* =========================================================
+   PRICING PAGE — INCENTIVE MODEL REDESIGN
+========================================================= */
+
+.pricing-page { width: 100%; }
+
+/* ── HERO ───────────────────────────────────────────────── */
+.pricing-hero {
+  text-align: center;
+  padding: 72px 24px 44px;
+  background: linear-gradient(180deg, rgba(37,99,235,0.06) 0%, rgba(124,58,237,0.04) 50%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.pricing-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 700px 400px at 20% 50%, rgba(37,99,235,0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 300px at 80% 20%, rgba(124,58,237,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.pricing-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(37,99,235,0.08);
+  border: 1px solid rgba(37,99,235,0.16);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+.pricing-headline {
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  line-height: 1.06;
+  color: var(--text-h);
+  margin: 0 auto 18px;
+  max-width: 760px;
+}
+.pricing-headline-accent {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.pricing-subtext {
+  max-width: 640px;
+  margin: 0 auto 28px;
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+.pricing-social-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+.social-proof-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-h);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* ── BILLING TOGGLE ─────────────────────────────────────── */
+.billing-toggle-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 22px 0 8px;
+}
+.toggle-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--border2);
+  transition: color 0.15s;
+}
+.toggle-label.active { color: var(--text-h); }
+.billing-toggle {
+  width: 48px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--bg3);
+  border: 1.5px solid var(--border2);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+.billing-toggle.on { background: var(--accent); border-color: var(--accent); }
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  transition: transform 0.2s ease;
+}
+.billing-toggle.on .toggle-thumb { transform: translateX(22px); }
+.savings-badge {
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(5,150,105,0.1);
+  border: 1px solid rgba(5,150,105,0.2);
+  color: var(--success);
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+/* ── INCENTIVE BADGE (per card) ─────────────────────────── */
+.incentive-badge {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: rgba(5,150,105,0.06);
+  border: 1px solid rgba(5,150,105,0.16);
+}
+.incentive-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 1px;
+}
+.incentive-badge strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--success);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.incentive-badge p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ── SECTION SHARED ─────────────────────────────────────── */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(37,99,235,0.07);
+  border: 1px solid rgba(37,99,235,0.15);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: var(--text-h);
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+}
+.section-sub {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ── INCENTIVE MODELS ───────────────────────────────────── */
+.incentive-section {
+  margin-top: 64px;
+  padding-top: 52px;
+  border-top: 1px solid var(--border);
+}
+.incentive-section-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.incentive-models-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+  gap: 18px;
+}
+.incentive-model-card {
+  padding: 26px 22px;
+  border-radius: var(--radius-xl);
+  border: 1px solid;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+.incentive-model-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 44px rgba(15,23,42,0.1);
+}
+.im-icon { font-size: 2.1rem; line-height: 1; }
+.im-title {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+.im-desc {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.72;
+  margin: 0;
+  flex: 1;
+}
+.im-metric {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  width: fit-content;
+}
+
+/* ── LIVE METRICS DASHBOARD ─────────────────────────────── */
+.metrics-strip {
+  margin-top: 64px;
+  padding: 44px 36px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(37,99,235,0.05) 0%, rgba(124,58,237,0.04) 100%);
+  border: 1px solid rgba(37,99,235,0.12);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.metrics-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 600px 300px at 50% 0%, rgba(37,99,235,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.metrics-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(5,150,105,0.1);
+  border: 1px solid rgba(5,150,105,0.22);
+  color: var(--success);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+.metric-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  box-shadow: 0 2px 10px rgba(15,23,42,0.05);
+  text-align: center;
+}
+.metric-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--border2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+.metric-value {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1;
+  margin: 0;
+}
+
+/* ── COHORT BANNER ──────────────────────────────────────── */
+.cohort-banner {
+  margin-top: 64px;
+  padding: 40px 36px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.08) 100%);
+  border: 1px solid rgba(37,99,235,0.16);
+}
+.cohort-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+.cohort-desc {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.75;
+  margin: 6px 0 0;
+  max-width: 560px;
+}
+.cohort-btn {
+  min-width: 200px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── FINAL CTA ──────────────────────────────────────────── */
+.pricing-final-cta {
+  text-align: center;
+  padding: 64px 20px 48px;
+}
+.final-cta-row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .pricing-hero { padding: 48px 20px 32px; }
+  .pricing-social-row { flex-direction: column; align-items: center; }
+  .metrics-strip { padding: 32px 18px; }
+  .cohort-inner { flex-direction: column; text-align: center; }
+  .cohort-btn { width: 100%; }
+  .final-cta-row { flex-direction: column; align-items: center; }
+  .final-cta-row .cta-btn { width: 100%; }
+}
