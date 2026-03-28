@@ -1,8 +1,15 @@
 ﻿import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockCareerResult } from "../data/mockCareerResult";
+import { postJson } from "../utils/api";
 
 const questions = [
+  {
+    name: "user_status",
+    label: "Current status",
+    type: "select",
+    options: ["student", "professional", "unemployed"],
+    hint: "Choose the category that best describes your current status.",
+  },
   {
     name: "background",
     label: "Your professional background",
@@ -45,6 +52,7 @@ export default function OnboardingPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
+    user_status: "student",
     background: "",
     field_of_study: "",
     interests: "",
@@ -52,6 +60,8 @@ export default function OnboardingPage() {
     preferences: "",
     goal: "",
   });
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const completed = useMemo(
     () => Object.values(form).filter((value) => value.trim().length > 0).length,
@@ -65,8 +75,50 @@ export default function OnboardingPage() {
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    navigate("/career-results", { state: mockCareerResult });
+  const splitValues = (value) =>
+    value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+  const defaultAptitudeAnswers = [
+    { question_id: "q1", selected_option: "A" },
+    { question_id: "q2", selected_option: "C" },
+    { question_id: "q3", selected_option: "B" },
+    { question_id: "q4", selected_option: "D" },
+    { question_id: "q5", selected_option: "A" },
+  ];
+
+  const defaultCharacterAnswers = [
+    { trait_id: "leadership", score: 3 },
+    { trait_id: "logic", score: 5 },
+    { trait_id: "detail", score: 5 },
+    { trait_id: "creativity", score: 4 },
+    { trait_id: "risk", score: 2 },
+    { trait_id: "extroversion", score: 3 },
+  ];
+
+  const handleSubmit = async () => {
+    const requestPayload = {
+      user_status: form.user_status,
+      current_role_or_degree: form.field_of_study || form.background,
+      interests: splitValues(form.interests),
+      strengths: splitValues(form.strengths),
+      preferences: splitValues(form.preferences),
+      aptitude_answers: defaultAptitudeAnswers,
+      character_answers: defaultCharacterAnswers,
+    };
+
+    try {
+      setSubmitting(true);
+      setSubmitError("");
+      const response = await postJson("/api/analyze-career-diagnostic", requestPayload);
+      navigate("/career-results", { state: response });
+    } catch (error) {
+      setSubmitError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -93,15 +145,30 @@ export default function OnboardingPage() {
           </div>
         </div>
 
+        {submitError && (
+          <div className="alert-banner" role="alert" aria-live="assertive">
+            {submitError}
+          </div>
+        )}
+
         <div className="question-grid">
           {questions.map((question) => {
-            const isLong = question.name !== "background" && question.name !== "field_of_study";
+            const isLong = question.name !== "background" && question.name !== "field_of_study" && question.type !== "select";
+            const isSelect = question.type === "select";
             const value = form[question.name];
 
             return (
               <label className="question-field" key={question.name} htmlFor={question.name}>
                 <span>{question.label}</span>
-                {isLong ? (
+                {isSelect ? (
+                  <select id={question.name} name={question.name} value={value} onChange={handleChange}>
+                    {question.options.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                ) : isLong ? (
                   <textarea
                     id={question.name}
                     name={question.name}
@@ -133,8 +200,8 @@ export default function OnboardingPage() {
           >
             Review questions
           </button>
-          <button type="button" className="onboarding-btn" onClick={handleSubmit}>
-            See career matches
+          <button type="button" className="onboarding-btn" onClick={handleSubmit} disabled={submitting}>
+            {submitting ? "Submitting..." : "See career matches"}
           </button>
         </div>
       </section>

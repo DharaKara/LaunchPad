@@ -1,8 +1,17 @@
 ﻿import { useState } from "react";
-import { mockCvSimulation } from "../data/mockCvSimulation";
-import { mockCvImprovement } from "../data/mockCvImprovement";
-import { generateMockInterviewQuestions } from "../utils/interview";
+import { postJson } from "../utils/api";
 
+// Backend integration notes:
+// - Phase 1: POST http://localhost:8000/api/simulate-cv-initiate
+//   Request: { cv_text, job_description, target_role }
+//   Response: { session_id, questions: [{ id, category, question_text }] }
+// - Phase 2: POST http://localhost:8000/api/simulate-cv-verdict
+//   Request: { session_id, cv_text, job_description, target_role, answers }
+//   Response: { funnel_stages, post_mortem, ... }
+// - CV Optimizer: POST http://localhost:8000/api/improve-cv
+//   Request: { cv_text, job_description }
+//   Response: { improved_summary, improved_bullets, new_score, new_decision }
+// Global error handling: backend 500 may include audit_note. Show "Logic Error: Data Mismatch".
 export default function CvSimulatorPage() {
   const [cvText, setCvText] = useState("");
   const [cvFileName, setCvFileName] = useState("");
@@ -10,6 +19,8 @@ export default function CvSimulatorPage() {
   const [jdText, setJdText] = useState("");
   const [jdFileName, setJdFileName] = useState("");
   const [jdDragging, setJdDragging] = useState(false);
+  const [targetRole, setTargetRole] = useState("Software Engineer");
+  const [sessionId, setSessionId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState(null);
   const [interviewQuestions, setInterviewQuestions] = useState([]);
@@ -30,20 +41,53 @@ export default function CvSimulatorPage() {
     return label.replace("-", " ");
   };
 
-  const runSimulation = () => {
-    if (!cvText.trim() || !jdText.trim()) {
-      setErrorMessage("Provide both your CV and the job description to get an accurate score.");
+  const runSimulation = async () => {
+    if (!cvText.trim() || !jdText.trim() || !targetRole.trim()) {
+      setErrorMessage("Provide your CV, job description, and target role to start the simulation.");
       return;
     }
 
     setErrorMessage("");
     setImproved(null);
+    setResult(null);
     setCurrentAnswer("");
     setUserAnswers([]);
     setCurrentQuestionIndex(0);
     setInterviewCompleted(false);
-    setInterviewQuestions(generateMockInterviewQuestions(cvText, jdText));
-    setResult(mockCvSimulation);
+
+    try {
+      const response = await postJson("/api/simulate-cv-initiate", {
+        cv_text: cvText,
+        job_description: jdText,
+        target_role: targetRole,
+      });
+
+      setSessionId(response.session_id || null);
+      setInterviewQuestions(response.questions || []);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  const submitVerdict = async (answers) => {
+    if (!sessionId) {
+      setErrorMessage("Missing simulation session. Please restart the simulation.");
+      return;
+    }
+
+    try {
+      const response = await postJson("/api/simulate-cv-verdict", {
+        session_id: sessionId,
+        cv_text: cvText,
+        job_description: jdText,
+        target_role: targetRole,
+        answers,
+      });
+
+      setResult(response);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
   const handleAnswerSubmit = () => {
@@ -53,25 +97,43 @@ export default function CvSimulatorPage() {
     }
 
     setErrorMessage("");
-    setUserAnswers([...userAnswers, currentAnswer.trim()]);
+
+    const nextAnswer = {
+      question_id: interviewQuestions[currentQuestionIndex]?.id,
+      answer_text: currentAnswer.trim(),
+    };
+
+    const nextAnswers = [...userAnswers, nextAnswer];
+    setUserAnswers(nextAnswers);
     setCurrentAnswer("");
 
     const nextIndex = currentQuestionIndex + 1;
     if (nextIndex >= interviewQuestions.length) {
       setInterviewCompleted(true);
+      submitVerdict(nextAnswers);
     } else {
       setCurrentQuestionIndex(nextIndex);
     }
   };
 
-  const improveCv = () => {
-    if (!result) {
-      setErrorMessage("Run the simulation first to generate improvement suggestions.");
+  const improveCv = async () => {
+    if (!cvText.trim() || !jdText.trim()) {
+      setErrorMessage("Provide your CV and the job description before requesting improvements.");
       return;
     }
 
     setErrorMessage("");
-    setImproved(mockCvImprovement);
+
+    try {
+      const response = await postJson("/api/improve-cv", {
+        cv_text: cvText,
+        job_description: jdText,
+      });
+
+      setImproved(response);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
   };
 
   const readTextFile = (file, setText, setName) => {
@@ -118,6 +180,20 @@ export default function CvSimulatorPage() {
           Compare your resume to a job description, discover missing keywords, and get an instant
           ATS readiness score with optimization hints.
         </p>
+      </section>
+
+      <section className="input-card target-role-card">
+        <label htmlFor="targetRole">Target role</label>
+        <select
+          id="targetRole"
+          value={targetRole}
+          onChange={(e) => setTargetRole(e.target.value)}
+        >
+          <option value="Software Engineer">Software Engineer</option>
+          <option value="Data Analyst">Data Analyst</option>
+          <option value="Product Manager">Product Manager</option>
+          <option value="UX Designer">UX Designer</option>
+        </select>
       </section>
 
       <div className="cv-simulator-grid">
@@ -280,42 +356,73 @@ export default function CvSimulatorPage() {
               <h2>Simulation results</h2>
               <p className="muted">Based on your resume and the job description</p>
             </div>
-            <span className={`result-pill result-${formatScoreLabel(result.ats_scan.score)}`}>
-              {formatScoreLabelText(result.ats_scan.score)}
-            </span>
+            {result.ats_scan ? (
+              <span className={`result-pill result-${formatScoreLabel(result.ats_scan.score)}`}>
+                {formatScoreLabelText(result.ats_scan.score)}
+              </span>
+            ) : (
+              <span className="result-pill result-good">Simulation complete</span>
+            )}
           </div>
 
-          <div className="score-block">
-            <div className="score-value">{result.ats_scan.score}%</div>
-            <div className="score-label">ATS readiness score</div>
-          </div>
+          {result.ats_scan && (
+            <>
+              <div className="score-block">
+                <div className="score-value">{result.ats_scan.score}%</div>
+                <div className="score-label">ATS readiness score</div>
+              </div>
 
-          <div className="result-grid">
-            <div className="result-metric">
-              <h3>Shortlist decision</h3>
-              <p>{result.shortlist_decision}</p>
-            </div>
-            <div className="result-metric">
-              <h3>Missing keywords</h3>
-              {result.ats_scan.missing_keywords.length ? (
-                <ul className="keyword-list">
-                  {result.ats_scan.missing_keywords.map((keyword) => (
-                    <li key={keyword}>{keyword}</li>
-                  ))}
-                </ul>
-              ) : (
-                <p>None detected</p>
-              )}
-            </div>
-            <div className="result-metric full-width">
-              <h3>Rejection reasons</h3>
-              <ul className="reason-list">
-                {result.rejection_reasons.map((reason) => (
-                  <li key={reason}>{reason}</li>
+              <div className="result-grid">
+                <div className="result-metric">
+                  <h3>Shortlist decision</h3>
+                  <p>{result.shortlist_decision}</p>
+                </div>
+                <div className="result-metric">
+                  <h3>Missing keywords</h3>
+                  {result.ats_scan.missing_keywords.length ? (
+                    <ul className="keyword-list">
+                      {result.ats_scan.missing_keywords.map((keyword) => (
+                        <li key={keyword}>{keyword}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>None detected</p>
+                  )}
+                </div>
+                <div className="result-metric full-width">
+                  <h3>Rejection reasons</h3>
+                  <ul className="reason-list">
+                    {result.rejection_reasons.map((reason) => (
+                      <li key={reason}>{reason}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </>
+          )}
+
+          {result.funnel_stages && (
+            <div className="funnel-section">
+              <h3>Hiring funnel</h3>
+              <ul className="funnel-list">
+                {result.funnel_stages.map((stage, index) => (
+                  <li key={index} className={`funnel-stage funnel-stage--${stage.status.toLowerCase()}`}>
+                    <strong>{stage.name}</strong>
+                    <span>{stage.status}</span>
+                  </li>
                 ))}
               </ul>
             </div>
-          </div>
+          )}
+
+          {result.post_mortem && (
+            <div className="result-grid">
+              <div className="result-metric full-width">
+                <h3>Brutally honest feedback</h3>
+                <p>{result.post_mortem}</p>
+              </div>
+            </div>
+          )}
 
           <div className="actions-row">
             <button type="button" className="cta-secondary" onClick={improveCv}>
@@ -332,7 +439,7 @@ export default function CvSimulatorPage() {
               <h2>Improvement preview</h2>
               <p className="muted">AI-suggested resume enhancements</p>
             </div>
-            <span className="result-pill result-excellent">+{improved.new_score - result.ats_scan.score}%</span>
+            <span className="result-pill result-excellent">{improved.new_score}%</span>
           </div>
 
           <div className="score-block">
@@ -342,6 +449,16 @@ export default function CvSimulatorPage() {
 
           <div className="improvement-summary">
             <p>{improved.improved_summary}</p>
+            {improved.improved_bullets?.length > 0 && (
+              <div>
+                <h3>Suggested bullets</h3>
+                <ul>
+                  {improved.improved_bullets.map((bullet, index) => (
+                    <li key={index}>{bullet}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <p>
               <strong>New recommendation:</strong> {improved.new_decision}
             </p>
